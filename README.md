@@ -1,82 +1,71 @@
-# WebSocket Integration Documentation
+# Documentation d'Intégration WebSocket
+Une description de la façon dont nous aimerions nous intégrer avec vous.
+Idéalement, les médecins recevraient une notification en temps réel via WebSocket avec le rapport du *PATIENT ACTUEL* directement dans les champs appropriés.
 
-Hei eng kleng Beschreiwung dovun wéi mir ganz gaeren mat ierch integréieren géifen.
-Idealerweis géifen d Dokteren iwwert deen Websocket eng real-time notificatioun mam Rapport vum *AKTUELLEN PATIENT* am beschten direkt an déi richteg Felder.
+## Point de Terminaison WebSocket
+wss://upload-with-html.onrender.com/reports/ws  ---> adresse temporaire que les médecins pourront modifier
+CELLE-CI CHANGERA FRÉQUEMMENT
 
-
-## WebSocket Endpoint
-
-wss://upload-with-html.onrender.com/reports/ws  --->temporary address doctors shoudl be able to change
-THIS WILL SWITCH OFTEN
-
-## Authentication
-
-After establishing the WebSocket connection, you must send an authentication message within 10 seconds.
-The authentication message should be a JSON object containing the doctor's API key:
+## Authentification
+Après l'établissement de la connexion WebSocket, vous devez envoyer un message d'authentification dans les 10 secondes.
+Le message d'authentification doit être un objet JSON contenant la clé API du médecin :
 {
 "doctor_key": "api-key"
 }
 
-## Connection Lifecycle
+## Cycle de Vie de la Connexion
+1. Connexion au point de terminaison WebSocket
+2. Envoi du message d'authentification dans les 10 secondes
+3. Maintien de la connexion avec messages ping/pong (optionnel)
+4. Gestion des notifications entrantes
+5. Gestion des scénarios de déconnexion
 
-Connect to the WebSocket endpoint
-Send authentication message within 10 seconds
-Maintain connection with ping/pong messages (optional)
-Handle incoming notifications
-Handle disconnection scenarios
-
-### Ping/Pong Heartbeat
-
-To keep the connection alive, you can send a ping message:
-- Send: "ping"
-- Receive: "pong"
-Ideally every 30 seconds
+### Heartbeat Ping/Pong
+Pour maintenir la connexion active, vous pouvez envoyer un message ping :
+- Envoi : "ping"
+- Réception : "pong"
+Idéalement toutes les 30 secondes
 
 ## Notifications
-### Report Ready Notification
-
-When a report is ready, you'll receive a JSON message with the following structure:
+### Notification de Rapport Prêt
+Lorsqu'un rapport est prêt, vous recevrez un message JSON avec la structure suivante :
 {
 "type": "report_ready", (STRING)
-"url": "signed-url-to-download-docx", (STRING ---> signed URL to download the docx file)
-"html_content": "html-version-of-report", (STRING ---> html version of the report)
-"rtf_report": "rtf-version-of-report", (STRING ---> rich text format version of the report)
-"plaintext_report": "plain-text-version", (STRING ---> plain text version of the report)
-"json_report": ----> NESTED JSON OBJECT with access to all the data in the report
+"url": "url-signée-pour-télécharger-docx", (STRING ---> URL signée pour télécharger le fichier docx)
+"html_content": "version-html-du-rapport", (STRING ---> version HTML du rapport)
+"rtf_report": "version-rtf-du-rapport", (STRING ---> version format texte enrichi du rapport)
+"plaintext_report": "version-texte-simple", (STRING ---> version texte simple du rapport)
+"json_report": ----> OBJET JSON IMBRIQUÉ avec accès à toutes les données du rapport
 {
-"history": "patient-history",
-"findings": "examination-findings",
-"diagnosis": "diagnosis",
-"procedure": "procedures-performed",
-"recommendation": "recommendations"
+"history": "historique-patient",
+"findings": "résultats-examen",
+"diagnosis": "diagnostic",
+"procedure": "procédures-effectuées",
+"recommendation": "recommandations"
+}
 }
 
-}
-
-### Error Notifications
-
-If an error occurs, you'll receive a JSON message with the following structure:
-
+### Notifications d'Erreur
+En cas d'erreur, vous recevrez un message JSON avec la structure suivante :
 {
 "type": "error",
-"message": "error-description",
+"message": "description-erreur",
 "code": 4000
 }
 
-## Connection Codes
+## Codes de Connexion
+1000 : Fermeture normale
+1008 : Violation de politique (généralement échec d'authentification)
+4000 : Erreur générique
 
-1000: Normal closure
-1008: Policy violation (usually authentication failure)
-4000: Generic error
-## Best Practices
+## Meilleures Pratiques
+- Authentification : Stockez et gérez la clé API de manière sécurisée
+- Reconnexion : Implémentez une stratégie de backoff exponentiel pour les tentatives de reconnexion
+- Gestion des Erreurs : Gérez toujours les messages d'erreur de manière appropriée
+- État de la Connexion : Surveillez l'état de la connexion et implémentez un retour UI approprié
+- Analyse des Messages : Validez tous les messages entrants avant le traitement
 
-Authentication: Store and handle the API key securely.
-Reconnection: Implement an exponential backoff strategy for reconnection attempts.
-Error Handling: Always handle error messages appropriately.
-Connection Status: Monitor the connection status and implement appropriate UI feedback.
-Message Parsing: Validate all incoming messages before processing.
-## Rate Limits and Timeouts
-
-Authentication timeout: 10 seconds
-Connection limit: One active connection per user ID
-Recommended ping interval: 30 seconds
+## Limites de Taux et Délais
+- Délai d'authentification : 10 secondes
+- Limite de connexion : Une connexion active par ID utilisateur
+- Intervalle de ping recommandé : 30 secondes
