@@ -29,23 +29,33 @@ Idéalement toutes les 30 secondes
 ## Notifications
 ### Notification de Rapport Prêt
 Lorsqu'un rapport est prêt, vous recevrez un message JSON avec la structure suivante :
-'''json
+
+
+
 {
 "type": "report_ready", (STRING)
+
 "url": "url-signée-pour-télécharger-docx", (STRING ---> URL signée pour télécharger le fichier docx)
+
 "html_content": "version-html-du-rapport", (STRING ---> version HTML du rapport)
+
 "rtf_report": "version-rtf-du-rapport", (STRING ---> version format texte enrichi du rapport)
+
 "plaintext_report": "version-texte-simple", (STRING ---> version texte simple du rapport)
+
 "json_report": ----> OBJET JSON IMBRIQUÉ avec accès à toutes les données du rapport
+
 {
-"history": "historique-patient",
-"findings": "résultats-examen",
-"diagnosis": "diagnostic",
-"procedure": "procédures-effectuées",
-"recommendation": "recommandations"
+"history": "La patiente est venu parce qu'elle a mal",
+"findings": "Pouls de 100/min, tension arterielle 140/80mmHg",
+"diagnosis": "Cephalées chroniques non spécifiées",
+"procedure": "Examen physique et neurologique",
+"recommendation": "Nous recommandons du repos à la patiente"
 }
+
 }
-json
+
+
 ### Notifications d'Erreur
 En cas d'erreur, vous recevrez un message JSON avec la structure suivante :
 {
