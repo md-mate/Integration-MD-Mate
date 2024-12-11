@@ -3,7 +3,7 @@ Une description de la façon dont nous aimerions nous intégrer avec vous.
 Idéalement, les médecins recevraient une notification en temps réel via WebSocket avec le rapport du *PATIENT ACTUEL* directement dans les champs appropriés.
 
 ## Point de Terminaison WebSocket
-wss://upload-with-html.onrender.com/reports/ws  ---> adresse temporaire que les médecins pourront modifier
+wss://fastapi-j6vv.onrender.com/reports/ws  ---> adresse temporaire que les médecins pourront modifier
 CELLE-CI CHANGERA FRÉQUEMMENT
 
 ## Authentification
