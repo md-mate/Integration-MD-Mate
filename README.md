@@ -29,6 +29,7 @@ Idéalement toutes les 30 secondes
 ## Notifications
 ### Notification de Rapport Prêt
 Lorsqu'un rapport est prêt, vous recevrez un message JSON avec la structure suivante :
+'''json
 {
 "type": "report_ready", (STRING)
 "url": "url-signée-pour-télécharger-docx", (STRING ---> URL signée pour télécharger le fichier docx)
@@ -44,7 +45,7 @@ Lorsqu'un rapport est prêt, vous recevrez un message JSON avec la structure sui
 "recommendation": "recommandations"
 }
 }
-
+json
 ### Notifications d'Erreur
 En cas d'erreur, vous recevrez un message JSON avec la structure suivante :
 {
