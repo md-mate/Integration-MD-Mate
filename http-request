@@ -1,0 +1,20 @@
+# Point de Terminaison HTTP pour le Téléchargement de Rapports
+
+## Endpoint
+URL actuelle:
+https://upload-with-html.onrender.com/donwload-and-copy
+
+## Requète et Authentification
+HTTPS GET 
+Header:
+doctor_key: Clé personelle du médecin changée régulièrement
+
+
+## Réponse
+### Succès (200 OK)
+```json
+{
+    "status": "success",
+    "file_url": "url_du_fichier",
+    "html_content": "contenu_html_du_rapport"
+}
